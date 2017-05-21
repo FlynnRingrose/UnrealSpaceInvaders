@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Pawn.h"
+#include "PlayerProjectile.h"
 #include "Ship.generated.h"
 
 UCLASS()
@@ -13,6 +14,9 @@ class SPACEINVADERSUNREAL_API AShip : public APawn
 public:
 	// Sets default values for this pawn's properties
 	AShip();
+    
+    UFUNCTION(BlueprintCallable, Category = "Firing")
+    void ActivateMissile();
 
 protected:
 	// Called when the game starts or when spawned
@@ -36,4 +40,15 @@ public:
     float TimeOfLastMove;
     
     float MoveDelay = 0.025f;
+    
+    double LastFireTime = 0.f;
+    
+    int32 LaunchSpeed = 800;
+    
+    UPROPERTY(EditAnywhere, Category = "Setup")
+    UStaticMeshComponent* PlayerShip = nullptr;
+    
+    UPROPERTY(EditDefaultsOnly, Category = "Setup")
+    TSubclassOf<APlayerProjectile> PlayerProjectileBlueprint; //Unlike UClass*, this will only make the projectile available in the editor.
+    
 };

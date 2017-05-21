@@ -9,7 +9,13 @@ AShip::AShip()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+    
+    USphereComponent* SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("RootComponent"));
+    RootComponent = SphereComponent;
+    
+    PlayerShip = CreateDefaultSubobject<UStaticMeshComponent>(FName("PlayerShipMesh"));
+    PlayerShip->SetupAttachment(RootComponent);
+    
 }
 
 // Called when the game starts or when spawned
@@ -44,4 +50,16 @@ void AShip::MoveRight(float Scale)
         AddMovementInput(ShipDirection, Scale, true);
         TimeOfLastMove = GetWorld()->GetTimeSeconds();
     }
+}
+
+void AShip::ActivateMissile()
+{
+    APlayerProjectile* NewMissile = GetWorld()->SpawnActor<APlayerProjectile>(
+        PlayerProjectileBlueprint,
+        PlayerShip->GetSocketLocation(FName("MissileSocket")),
+        PlayerShip->GetSocketRotation(FName("MissileSocket"))
+        );
+    
+    NewMissile->LaunchMissile(LaunchSpeed);
+    LastFireTime = FPlatformTime::Seconds();
 }
