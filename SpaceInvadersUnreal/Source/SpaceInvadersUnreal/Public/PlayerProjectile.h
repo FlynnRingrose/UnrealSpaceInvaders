@@ -27,10 +27,12 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+    UFUNCTION()
     void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
     
     UPROPERTY(VisibleAnywhere, Category = "Components")
     UStaticMeshComponent* Missile = nullptr;
     
+    UPROPERTY(EditAnywhere, Category = "Components")
     UProjectileMovementComponent* MissileMovement = nullptr;
 };

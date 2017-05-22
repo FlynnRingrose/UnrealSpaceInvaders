@@ -43,7 +43,7 @@ public:
     
     double LastFireTime = 0.f;
     
-    int32 LaunchSpeed = 800;
+    int32 LaunchSpeed = 1000;
     
     UPROPERTY(EditAnywhere, Category = "Setup")
     UStaticMeshComponent* PlayerShip = nullptr;

@@ -21,22 +21,11 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
     
     UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
     void InitializeBugAlien();
 
     void MoveAlien();
-    
-    float MoveSpeed = 1.f;
-    
-    float TimeOfLastMove;
-    
-    float MoveDelay = 1.f;
-    
-    bool bIsAlienOpen;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Static Mesh Assets")
     UInstancedStaticMeshComponent* StaticBugComponent;
@@ -46,4 +35,12 @@ public:
     
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category= "Static Mesh Assets")
     UStaticMesh* StaticBugClosed;
+    
+    float MoveSpeed = 1.f;
+    
+    float TimeOfLastMove;
+    
+    float MoveDelay = 1.f;
+    
+    bool bIsAlienOpen;
 };

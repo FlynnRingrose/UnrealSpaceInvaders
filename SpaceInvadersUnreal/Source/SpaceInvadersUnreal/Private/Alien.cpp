@@ -29,13 +29,6 @@ void AAlien::BeginPlay()
     bIsAlienOpen = false;
 }
 
-// Called to bind functionality to input
-void AAlien::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-    Super::SetupPlayerInputComponent(PlayerInputComponent);
-    
-}
-
 // Called every frame
 void AAlien::Tick(float DeltaTime)
 {
