@@ -15,11 +15,11 @@ AAlien::AAlien()
     USphereComponent* SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("RootComponent"));
     RootComponent = SphereComponent;
     
-    //StaticBugComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticBugComponent"));
-    //StaticBugComponent->SetupAttachment(RootComponent);
-    
     StaticBugComponent = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("InstancedBug"));
     StaticBugComponent->SetupAttachment(RootComponent);
+    
+    StaticBugComponent->SetNotifyRigidBodyCollision(true);
+    StaticBugComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 }
 
 // Called when the game starts or when spawned
@@ -27,6 +27,7 @@ void AAlien::BeginPlay()
 {
 	Super::BeginPlay();
     bIsAlienOpen = false;
+    StaticBugComponent->OnComponentHit.AddDynamic(this, &AAlien::OnHit);
 }
 
 // Called every frame
@@ -58,4 +59,10 @@ void AAlien::MoveAlien()
         
         TimeOfLastMove = GetWorld()->GetTimeSeconds();
     }
+}
+
+void AAlien::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
+{
+    StaticBugComponent->RemoveInstance(Hit.Item); //Gets the index of the hit item in the array and removes it.
+    //TODO Reverse direction on hit.
 }

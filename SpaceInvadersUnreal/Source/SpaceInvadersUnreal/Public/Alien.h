@@ -25,6 +25,9 @@ public:
     UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
     void InitializeBugAlien();
 
+    UFUNCTION()
+    void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+    
     void MoveAlien();
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Static Mesh Assets")
@@ -43,4 +46,5 @@ public:
     float MoveDelay = 1.f;
     
     bool bIsAlienOpen;
+    
 };

@@ -38,8 +38,6 @@ void APlayerProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherAc
 {
     this->Destroy();
     UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherComponent->GetName())
-    //TODO Remove intance hit without blueprints.
-    //TODO Only allow one missile on screen at one time.
 }
 
 void APlayerProjectile::LaunchMissile(int32 LaunchSpeed)

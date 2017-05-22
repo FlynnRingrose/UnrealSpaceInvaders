@@ -44,12 +44,12 @@ void AShip::MoveRight(float Scale)
 {
     //UE_LOG(LogTemp, Warning, TEXT("Move right value is %f"), Scale)
     FVector ShipDirection = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorForwardVector();
-    
-    if(GetWorld()->GetTimeSeconds() >= TimeOfLastMove + MoveDelay)
+    AddMovementInput(ShipDirection, Scale, true);
+    /*if(GetWorld()->GetTimeSeconds() >= TimeOfLastMove + MoveDelay)
     {
         AddMovementInput(ShipDirection, Scale, true);
         TimeOfLastMove = GetWorld()->GetTimeSeconds();
-    }
+    }*/
 }
 
 void AShip::ActivateMissile()
