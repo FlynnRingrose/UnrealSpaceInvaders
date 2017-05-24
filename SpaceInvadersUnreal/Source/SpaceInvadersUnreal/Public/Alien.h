@@ -5,6 +5,14 @@
 #include "GameFramework/Pawn.h"
 #include "Alien.generated.h"
 
+UENUM()
+enum class EAlienMovementState : uint8
+{
+    MovingRight,
+    MovingLeft,
+    MovingDown
+};
+
 UCLASS()
 class SPACEINVADERSUNREAL_API AAlien : public APawn
 {
@@ -13,10 +21,16 @@ class SPACEINVADERSUNREAL_API AAlien : public APawn
 public:
 	// Sets default values for this pawn's properties
 	AAlien();
+    
+    EAlienMovementState GetAlienMovementState();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+    
+    UPROPERTY(BlueprintReadOnly, Category = "State")
+    EAlienMovementState AlienMovementState = EAlienMovementState::MovingRight;
 
 public:	
 	// Called every frame
@@ -29,6 +43,8 @@ public:
     void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
     
     void MoveAlien();
+    
+    void AliensDance();
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Static Mesh Assets")
     UInstancedStaticMeshComponent* StaticBugComponent;
@@ -44,6 +60,10 @@ public:
     float TimeOfLastMove;
     
     float MoveDelay = 1.f;
+    
+    float TimeOfLastDance;
+    
+    float DanceDelay = 1.f;
     
     bool bIsAlienOpen;
     

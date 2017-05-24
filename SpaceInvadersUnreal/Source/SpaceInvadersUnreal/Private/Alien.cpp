@@ -3,7 +3,6 @@
 #include "SpaceInvadersUnreal.h"
 #include "Alien.h"
 
-
 // Sets default values
 AAlien::AAlien()
 {
@@ -34,17 +33,43 @@ void AAlien::BeginPlay()
 void AAlien::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+    GetAlienMovementState();
     MoveAlien();
+    AliensDance();
 }
 
 void AAlien::MoveAlien()
 {
-    if(GetWorld()->GetTimeSeconds() >= TimeOfLastMove + MoveDelay)
+    if(GetWorld()->GetTimeSeconds() >= TimeOfLastMove + MoveDelay && AlienMovementState == EAlienMovementState::MovingLeft)
     {
         FVector AlienLocation = GetActorLocation();
         AlienLocation.X += 20.0f;
         SetActorLocation(AlienLocation, false);
         
+        TimeOfLastMove = GetWorld()->GetTimeSeconds();
+    }
+    else if(GetWorld()->GetTimeSeconds() >= TimeOfLastMove + MoveDelay && AlienMovementState == EAlienMovementState::MovingRight)
+    {
+        FVector AlienLocation = GetActorLocation();
+        AlienLocation.X += -20.0f;
+        SetActorLocation(AlienLocation, false);
+        
+        TimeOfLastMove = GetWorld()->GetTimeSeconds();
+    }
+    else if(GetWorld()->GetTimeSeconds() >= TimeOfLastMove + MoveDelay && AlienMovementState == EAlienMovementState::MovingDown)
+    {
+        FVector AlienLocation = GetActorLocation();
+        AlienLocation.Z += -10.0f;
+        SetActorLocation(AlienLocation, false);
+        
+        TimeOfLastMove = GetWorld()->GetTimeSeconds();
+    }
+}
+
+void AAlien::AliensDance()
+{
+    if(GetWorld()->GetTimeSeconds() >= TimeOfLastDance + DanceDelay)
+    {
         if(bIsAlienOpen == true)
         {
             StaticBugComponent->SetStaticMesh(StaticBugClosed);
@@ -57,7 +82,7 @@ void AAlien::MoveAlien()
             bIsAlienOpen = true;
         }
         
-        TimeOfLastMove = GetWorld()->GetTimeSeconds();
+        TimeOfLastDance = GetWorld()->GetTimeSeconds();
     }
 }
 
@@ -65,4 +90,10 @@ void AAlien::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimi
 {
     StaticBugComponent->RemoveInstance(Hit.Item); //Gets the index of the hit item in the array and removes it.
     //TODO Reverse direction on hit.
+}
+
+
+EAlienMovementState AAlien::GetAlienMovementState()
+{
+    return AlienMovementState;
 }
