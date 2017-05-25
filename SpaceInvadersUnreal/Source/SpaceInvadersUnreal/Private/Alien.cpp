@@ -27,39 +27,31 @@ void AAlien::BeginPlay()
 	Super::BeginPlay();
     bIsAlienOpen = false;
     StaticBugComponent->OnComponentHit.AddDynamic(this, &AAlien::OnHit);
+    //StaticBugComponent->OnComponentBeginOverlap.AddDynamic(this, &AAlien::OnActorBeginOverlap);
 }
 
 // Called every frame
 void AAlien::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-    GetAlienMovementState();
     MoveAlien();
     AliensDance();
 }
 
 void AAlien::MoveAlien()
 {
-    if(GetWorld()->GetTimeSeconds() >= TimeOfLastMove + MoveDelay && AlienMovementState == EAlienMovementState::MovingLeft)
+    if(GetWorld()->GetTimeSeconds() >= TimeOfLastMove + MoveDelay && bIsMovingRight == false)
     {
-        FVector AlienLocation = GetActorLocation();
+        AlienLocation = GetActorLocation();
         AlienLocation.X += 20.0f;
         SetActorLocation(AlienLocation, false);
         
         TimeOfLastMove = GetWorld()->GetTimeSeconds();
     }
-    else if(GetWorld()->GetTimeSeconds() >= TimeOfLastMove + MoveDelay && AlienMovementState == EAlienMovementState::MovingRight)
+    else if(GetWorld()->GetTimeSeconds() >= TimeOfLastMove + MoveDelay && bIsMovingRight == true)
     {
-        FVector AlienLocation = GetActorLocation();
+        AlienLocation = GetActorLocation();
         AlienLocation.X += -20.0f;
-        SetActorLocation(AlienLocation, false);
-        
-        TimeOfLastMove = GetWorld()->GetTimeSeconds();
-    }
-    else if(GetWorld()->GetTimeSeconds() >= TimeOfLastMove + MoveDelay && AlienMovementState == EAlienMovementState::MovingDown)
-    {
-        FVector AlienLocation = GetActorLocation();
-        AlienLocation.Z += -10.0f;
         SetActorLocation(AlienLocation, false);
         
         TimeOfLastMove = GetWorld()->GetTimeSeconds();
@@ -88,12 +80,30 @@ void AAlien::AliensDance()
 
 void AAlien::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
+    
+    FName HitActor = HitComponent->GetFName();
+    
+    UE_LOG(LogTemp, Warning, TEXT("Hitting %s"), HitActor)
+    
+    if(HitActor == FName("InstancedBug"))
+    {
     StaticBugComponent->RemoveInstance(Hit.Item); //Gets the index of the hit item in the array and removes it.
     //TODO Reverse direction on hit.
+    }
+    else if(HitActor == FName("Barrier3"))
+    {
+        AlienLocation = GetActorLocation();
+        AlienLocation.Z -= 10.0f;
+        SetActorLocation(AlienLocation, false);
+        bIsMovingRight = false;
+    }
 }
 
 
-EAlienMovementState AAlien::GetAlienMovementState()
-{
-    return AlienMovementState;
-}
+
+
+
+
+
+
+
